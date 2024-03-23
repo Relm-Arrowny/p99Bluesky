@@ -12,6 +12,12 @@ jobs:
         with:
           name: dist
           path: dist
-
-      - name: Publish to PyPI using trusted publishing
-        uses: pypa/gh-action-pypi-publish@release/v1
+          
+      - name: Publish to PyPI
+        if: ${{ env.HAS_PYPI_TOKEN }}
+        #uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          password: ${{ secrets.PYPI_TOKEN }}
+          
+      #- name: Publish to PyPI using trusted publishing
+       # uses: pypa/gh-action-pypi-publish@release/v1
