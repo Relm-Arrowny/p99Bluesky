@@ -36,6 +36,7 @@ dev = [
     "sphinx-design",
     "tox-direct",
     "types-mock",
+    "ophyd_async",
 ]
 
 [project.scripts]
