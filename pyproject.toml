@@ -58,7 +58,8 @@ dev = [
     "jupyter",
     "softioc",
     "cothread",
-    "dls-dodal@git+https://github.com/DiamondLightSource/dodal.git",
+    "dls-dodal",
+    #"dls-dodal@git+https://github.com/DiamondLightSource/dodal.git",
 ]
 
 [project.scripts]
