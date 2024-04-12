@@ -12,8 +12,8 @@ class XYZStage(Device):
 
 class PitchRollStage(Device):
     def __init__(self, prefix: str, name: str):
-        self.pitch = Motor(prefix + "WRITEPITCH")
-        self.roll = Motor(prefix + "WRITEROLL")
+        self.pitch = Motor(prefix + "PITCH")
+        self.roll = Motor(prefix + "ROLL")
         Device.__init__(self, name=name)
 
 
@@ -25,7 +25,7 @@ class SelectableStage(Device):
 
 class ThetaStage(Device):
     def __init__(self, prefix: str, name: str):
-        self.theta = Motor(prefix + "WRITETHETA")
+        self.theta = Motor(prefix + "THETA")
         Device.__init__(self, name=name)
 
 
