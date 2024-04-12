@@ -56,7 +56,7 @@ dev = [
     "ipywidgets",
     "matplotlib",
     "numpydoc",
-    "pickleshare",,
+    "pickleshare",
     "pyside6",
     "pytest-faulthandler",
     "pytest-rerunfailures",
