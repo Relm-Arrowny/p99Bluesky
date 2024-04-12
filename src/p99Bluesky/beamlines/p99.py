@@ -17,8 +17,8 @@ def sample_Stage(
 
     return device_instantiation(
         SampleStage,
-        prefix="-OP-PCHRO-01:TS:",
-        name="turbo_slit",
+        prefix="-MO-STAGE-02:",
+        name="sample_stage",
         wait=wait_for_connection,
         fake=fake_with_ophyd_sim,
     )
