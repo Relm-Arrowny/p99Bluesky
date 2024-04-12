@@ -11,7 +11,22 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
 ]
 description = "p99 sandbox"
-dependencies = [] # Add project dependencies here, e.g. ["click", "numpy"]
+dependencies = [
+    "ophyd",
+    "ophyd-async>=0.3a1",
+    "bluesky",
+    "pyepics",
+    "dataclasses-json",
+    "pillow",
+    "zocalo",
+    "requests",
+    "graypy",
+    "pydantic",
+    "opencv-python-headless", # For pin-tip detection.
+    "aioca",                  # Required for CA support with ophyd-async.
+    "p4p",                    # Required for PVA support with ophyd-async.
+    "numpy",
+]
 dynamic = ["version"]
 license.file = "LICENSE"
 readme = "README.md"
@@ -35,21 +50,13 @@ dev = [
     "types-mock",
     "ophyd_async",
     "pytest-asyncio",
-    "bluesky",
     #===========================
-    "flake8",
-    "flake8-isort",
-    "Flake8-pyproject",
     "h5py",
-    "inflection",
     "ipython",
     "ipywidgets",
     "matplotlib",
-    "myst-parser",
     "numpydoc",
-    "ophyd",
-    "pickleshare",
-    "pyepics>=3.4.2",
+    "pickleshare",,
     "pyside6",
     "pytest-faulthandler",
     "pytest-rerunfailures",
