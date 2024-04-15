@@ -2,7 +2,7 @@ from ophyd_async.core import Device
 from ophyd_async.epics.motion.motor import Motor
 from ophyd_async.epics.signal.signal import epics_signal_rw
 
-
+"""
 class P99Motor(Motor):
     def __init__(self, prefix: str, name="") -> None:
         super().__init__(prefix, name)
@@ -30,12 +30,6 @@ class SelectableStage(Device):
         Device.__init__(self, name=name)
 
 
-class ThetaStage(Device):
-    def __init__(self, prefix: str, name: str):
-        self.theta = P99Motor(prefix + "THETA")
-        Device.__init__(self, name=name)
-
-
 class XYZRealwVirStage(XYZStage):
     def __init__(self, prefix: str, name: str, infix: str):
         self.virtualx = P99Motor(prefix + infix + "X")
@@ -43,10 +37,20 @@ class XYZRealwVirStage(XYZStage):
         self.virtualz = P99Motor(prefix + infix + "Z")
         XYZStage.__init__(self, prefix=prefix, name=name)
 
-
+"""
 class SampleStage(ThetaStage, PitchRollStage, XYZRealwVirStage, SelectableStage):
     def __init__(self, prefix: str, name: str):
         ThetaStage.__init__(self, prefix=prefix + "WRITE", name=name)
+        self.theta.setpoint = epics_signal_rw(float, prefix)
         PitchRollStage.__init__(self, prefix=prefix + "WRITE", name=name)
+        self.pitch.setpoint = epics_signal_rw(float, prefix)
+        self.roll.setpoint = epics_signal_rw(float, prefix)
         XYZRealwVirStage.__init__(self, prefix=prefix, name=name, infix="Lab:")
+        self.X.setpoint = epics_signal_rw(float, prefix)
+        self.Y.setpoint = epics_signal_rw(float, prefix)
+        self.Z.setpoint = epics_signal_rw(float, prefix)
+        self.virtualx.setpoint = epics_signal_rw(float, prefix)
+        self.virtualy.setpoint = epics_signal_rw(float, prefix)
+        self.virtualz.setpoint = epics_signal_rw(float, prefix)
         SelectableStage.__init__(self, prefix=prefix, name=name)
+        self.select.setpoint = epics_signal_rw(float, prefix)
