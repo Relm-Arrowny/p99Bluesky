@@ -1,6 +1,11 @@
-from ophyd_async.core import Device
-from ophyd_async.epics.motion.motor import Motor
 from ophyd_async.epics.signal.signal import epics_signal_rw
+
+from p99Bluesky.devices.stages import (
+    PitchRollStage,
+    SelectableStage,
+    ThetaStage,
+    XYZRealwVirStage,
+)
 
 """
 class P99Motor(Motor):
@@ -38,6 +43,8 @@ class XYZRealwVirStage(XYZStage):
         XYZStage.__init__(self, prefix=prefix, name=name)
 
 """
+
+
 class SampleStage(ThetaStage, PitchRollStage, XYZRealwVirStage, SelectableStage):
     def __init__(self, prefix: str, name: str):
         ThetaStage.__init__(self, prefix=prefix + "WRITE", name=name)
@@ -46,9 +53,9 @@ class SampleStage(ThetaStage, PitchRollStage, XYZRealwVirStage, SelectableStage)
         self.pitch.setpoint = epics_signal_rw(float, prefix)
         self.roll.setpoint = epics_signal_rw(float, prefix)
         XYZRealwVirStage.__init__(self, prefix=prefix, name=name, infix="Lab:")
-        self.X.setpoint = epics_signal_rw(float, prefix)
-        self.Y.setpoint = epics_signal_rw(float, prefix)
-        self.Z.setpoint = epics_signal_rw(float, prefix)
+        self.x.setpoint = epics_signal_rw(float, prefix)
+        self.y.setpoint = epics_signal_rw(float, prefix)
+        self.z.setpoint = epics_signal_rw(float, prefix)
         self.virtualx.setpoint = epics_signal_rw(float, prefix)
         self.virtualy.setpoint = epics_signal_rw(float, prefix)
         self.virtualz.setpoint = epics_signal_rw(float, prefix)
