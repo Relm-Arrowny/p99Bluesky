@@ -2,16 +2,15 @@ import asyncio
 import time
 from collections.abc import Callable
 
-from bluesky.protocols import Movable, Stoppable
+from bluesky.protocols import Movable
 from ophyd_async.core import AsyncStatus, StandardReadable
 from ophyd_async.epics.signal import (
     epics_signal_r,
     epics_signal_rw,
-    epics_signal_x,
 )
 
 
-class NoConfigMotor(StandardReadable, Movable, Stoppable):
+class SetReadOnlyMotor(StandardReadable, Movable):
     """Device that moves a motor with only set, read and stop
     Parameters
     ----------
@@ -30,10 +29,10 @@ class NoConfigMotor(StandardReadable, Movable, Stoppable):
     def __init__(self, prefix: str, name="", suffix: list[str] | None = None) -> None:
         # Define some signals
         if suffix is None:
-            suffix = [".VAL", ".RBV", ".STOP"]
+            suffix = [".VAL", ".RBV"]
         self.setpoint = epics_signal_rw(float, prefix + suffix[0])
         self.readback = epics_signal_r(float, prefix + suffix[1])
-        self.stop_ = epics_signal_x(prefix + suffix[2])
+        # self.stop_ = epics_signal_x(prefix + suffix[2])
         # Whether set() should complete successfully or not
         self._set_success = True
         # Set name and signals for read() and read_configuration()
@@ -88,9 +87,10 @@ class NoConfigMotor(StandardReadable, Movable, Stoppable):
         coro = asyncio.wait_for(self._move(value, watchers), timeout=timeout)
         return AsyncStatus(coro, watchers)
 
-    async def stop(self, success=False):
+
+"""    async def stop(self, success=False):
         self._set_success = success
         # Put with completion will never complete as we are waiting for completion on
         # the move above, so need to pass wait=False
         status = self.stop_.trigger(wait=False)
-        await status
+        await status"""

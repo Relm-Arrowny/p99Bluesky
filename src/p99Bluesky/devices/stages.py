@@ -1,7 +1,7 @@
 from ophyd_async.core import Device
 from ophyd_async.epics.motion.motor import Motor
 
-from p99Bluesky.devices.epics.NoConfigMotor import NoConfigMotor
+from p99Bluesky.devices.epics.set_read_only_motor import SetReadOnlyMotor
 
 
 class XYZStage(Device):
@@ -59,5 +59,5 @@ class SingleBasicStage(Device):
     def __init__(self, prefix: str, name: str, suffix: list[str] | None = None):
         if suffix is None:
             suffix = [".VAL", ".RBV"]
-        self.stage = NoConfigMotor(prefix, name, suffix)
+        self.stage = SetReadOnlyMotor(prefix, name, suffix)
         super().__init__(name=name)

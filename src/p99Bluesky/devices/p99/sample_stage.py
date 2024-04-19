@@ -1,12 +1,19 @@
 from ophyd_async.core import Device
 
-from p99Bluesky.devices.stages import NoConfigMotor
+from p99Bluesky.devices.epics.set_read_only_motor import SetReadOnlyMotor
 
 
-class SampleStage(Device):
+class SampleAngleStage(Device):
     def __init__(self, prefix: str, name: str):
-        self.theta = NoConfigMotor(prefix, name, suffix=["WRITETHETA", ".RBV", ".STOP"])
-        self.roll = NoConfigMotor(prefix, name, suffix=["WRITEROLL", ".RBV", ".STOP"])
+        self.theta = SetReadOnlyMotor(
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV"]
+        )
+        self.roll = SetReadOnlyMotor(
+            prefix, name, suffix=["WRITEROLL", "WRITEROLL:RBV"]
+        )
+        self.pitch = SetReadOnlyMotor(
+            prefix, name, suffix=["WRITEPITCH", "WRITEPITCH:RBV"]
+        )
         super().__init__(name=name)
 
 
