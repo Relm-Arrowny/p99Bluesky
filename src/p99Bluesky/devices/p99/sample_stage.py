@@ -5,8 +5,8 @@ from p99Bluesky.devices.stages import NoConfigMotor
 
 class SampleStage(Device):
     def __init__(self, prefix: str, name: str):
-        self.theta = NoConfigMotor(prefix, name, suffix="WRITETHETA")
-        self.roll = NoConfigMotor(prefix, name, "WRITEROLL")
+        self.theta = NoConfigMotor(prefix, name, suffix=["WRITETHETA", ".RBV", ".STOP"])
+        self.roll = NoConfigMotor(prefix, name, suffix=["WRITEROLL", ".RBV", ".STOP"])
         super().__init__(name=name)
 
 

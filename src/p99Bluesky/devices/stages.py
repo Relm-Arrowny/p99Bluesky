@@ -25,7 +25,7 @@ class XYZStage(Device):
 
     """
 
-    def __init__(self, prefix: str, name: str, infix: list[str] = None):
+    def __init__(self, prefix: str, name: str, infix: list[str] | None = None):
         if infix is None:
             infix = ["X", "Y", "Z"]
         self.x = Motor(prefix + infix[0])
@@ -52,11 +52,11 @@ class SingleBasicStage(Device):
     -----
     Example usage::
         async with DeviceCollector():
-        piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:")
+            piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:")
 
     """
 
-    def __init__(self, prefix: str, name: str, suffix: list[str] = None):
+    def __init__(self, prefix: str, name: str, suffix: list[str] | None = None):
         if suffix is None:
             suffix = [".VAL", ".RBV"]
         self.stage = NoConfigMotor(prefix, name, suffix)

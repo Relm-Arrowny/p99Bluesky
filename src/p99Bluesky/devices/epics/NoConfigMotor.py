@@ -4,8 +4,11 @@ from collections.abc import Callable
 
 from bluesky.protocols import Movable, Stoppable
 from ophyd_async.core import AsyncStatus, StandardReadable
-
-from ..signal.signal import epics_signal_r, epics_signal_rw, epics_signal_x
+from ophyd_async.epics.signal import (
+    epics_signal_r,
+    epics_signal_rw,
+    epics_signal_x,
+)
 
 
 class NoConfigMotor(StandardReadable, Movable, Stoppable):
@@ -24,13 +27,13 @@ class NoConfigMotor(StandardReadable, Movable, Stoppable):
         stage = NoConfigMotor("prefix", "name", "suffix")
     """
 
-    def __init__(self, prefix: str, name="", suffix: list[str] = None) -> None:
+    def __init__(self, prefix: str, name="", suffix: list[str] | None = None) -> None:
         # Define some signals
         if suffix is None:
             suffix = [".VAL", ".RBV", ".STOP"]
         self.setpoint = epics_signal_rw(float, prefix + suffix[0])
         self.readback = epics_signal_r(float, prefix + suffix[1])
-        self.stop_ = epics_signal_x(prefix + +suffix[2])
+        self.stop_ = epics_signal_x(prefix + suffix[2])
         # Whether set() should complete successfully or not
         self._set_success = True
         # Set name and signals for read() and read_configuration()
@@ -45,15 +48,13 @@ class NoConfigMotor(StandardReadable, Movable, Stoppable):
         # Readback should be named the same as its parent in read()
         self.readback.set_name(name)
 
-    async def _move(self, new_position: float, watchers: list[Callable] = None):
+    async def _move(self, new_position: float, watchers: list[Callable] | None = None):
         if watchers is None:
             watchers = []
         self._set_success = True
         start = time.monotonic()
-        old_position, units, precision = await asyncio.gather(
+        old_position = await asyncio.gather(
             self.setpoint.get_value(),
-            self.units.get_value(),
-            self.precision.get_value(),
         )
 
         def update_watchers(current_position: float):
@@ -63,8 +64,6 @@ class NoConfigMotor(StandardReadable, Movable, Stoppable):
                     current=current_position,
                     initial=old_position,
                     target=new_position,
-                    unit=units,
-                    precision=precision,
                     time_elapsed=time.monotonic() - start,
                 )
 
@@ -84,9 +83,9 @@ class NoConfigMotor(StandardReadable, Movable, Stoppable):
             raise RuntimeError("Will deadlock run engine if run in a plan")
         call_in_bluesky_event_loop(self._move(new_position), timeout)  # type: ignore
 
-    def set(self, new_position: float, timeout: float | None = None) -> AsyncStatus:
+    def set(self, value: float, timeout: float | None = None) -> AsyncStatus:
         watchers: list[Callable] = []
-        coro = asyncio.wait_for(self._move(new_position, watchers), timeout=timeout)
+        coro = asyncio.wait_for(self._move(value, watchers), timeout=timeout)
         return AsyncStatus(coro, watchers)
 
     async def stop(self, success=False):

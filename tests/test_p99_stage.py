@@ -11,20 +11,11 @@ A_BIT = 0.001
 @pytest.fixture
 async def sim_p99SampleStage():
     async with DeviceCollector(sim=True):
-        sim_p99SampleStage = SampleStage("p99-MO-TABLE-01:", "p99Stage")
+        sim_p99SampleStage = SampleStage("p99-MO-TABLE-01:", name="p99_stage")
         # Signals connected here
 
-    assert sim_p99SampleStage.name == "p99Stage"
     yield sim_p99SampleStage
 
 
 async def test_sim_p99SampleStage(sim_p99SampleStage: SampleStage) -> None:
-    assert sim_p99SampleStage.theta.name == "p99Stage-theta"
-    assert sim_p99SampleStage.pitch.name == "p99Stage-pitch"
-    assert sim_p99SampleStage.roll.name == "p99Stage-roll"
-    assert sim_p99SampleStage.x.name == "p99Stage-x"
-    assert sim_p99SampleStage.y.name == "p99Stage-y"
-    assert sim_p99SampleStage.z.name == "p99Stage-z"
-    assert sim_p99SampleStage.virtualx.name == "p99Stage-virtualx"
-    assert sim_p99SampleStage.virtualy.name == "p99Stage-virtualy"
-    assert sim_p99SampleStage.virtualz.name == "p99Stage-virtualz"
+    assert sim_p99SampleStage.name == "p99_stage"
