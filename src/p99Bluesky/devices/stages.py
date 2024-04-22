@@ -4,7 +4,7 @@ from ophyd_async.epics.motion.motor import Motor
 from p99Bluesky.devices.epics.set_read_only_motor import SetReadOnlyMotor
 
 
-class XYZStage(Device):
+class ThreeAxisStage(Device):
     """
 
     Standard ophyd_async xyz motor stage, by combining 3 Motors.
@@ -21,7 +21,11 @@ class XYZStage(Device):
     -----
     Example usage::
         async with DeviceCollector():
-        xyz_stage = XYZStage("BLXX-MO-STAGE-XX:")
+            xyz_stage = ThreeAxisStage("BLXX-MO-STAGE-XX:")
+    Or::
+        with DeviceCollector():
+            xyz_stage = ThreeAxisStage("BLXX-MO-STAGE-XX:", suffix = [".any",
+              ".there", ".motorPv"])
 
     """
 
@@ -47,7 +51,7 @@ class SingleBasicStage(Device):
     name:
         name for the stage.
     suffix:
-        EPICS PV, default is the [".VAL", ".RBV"].
+        EPICS PV, default is the [".VAL", ".RBV", "EGU"].
         Mostly use for correct non-standard pv
     Notes
     -----
@@ -55,13 +59,14 @@ class SingleBasicStage(Device):
         async with DeviceCollector():
             piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:")
     Or::
-        DeviceCollector():
-            piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:", suffix = [".stupid", ".Pv"])
+        with DeviceCollector():
+            piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:", suffix = [".stupid",
+              ".non-standard", ".Pv"])
 
     """
 
     def __init__(self, prefix: str, name: str, suffix: list[str] | None = None):
         if suffix is None:
-            suffix = [".VAL", ".RBV"]
+            suffix = [".VAL", ".RBV", ".EGU"]
         self.stage = SetReadOnlyMotor(prefix, name, suffix)
         super().__init__(name=name)
