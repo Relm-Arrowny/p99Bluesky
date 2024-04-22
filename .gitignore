@@ -45,7 +45,7 @@ coverage.xml
 cov.xml
 .pytest_cache/
 .mypy_cache/
-tests/jupyter_tests/.ipynb_checkpoints/*
+.ipynb_checkpoints
 # Translations
 *.mo
 *.pot
