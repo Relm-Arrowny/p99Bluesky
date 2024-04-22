@@ -4,22 +4,19 @@ from collections.abc import Callable
 
 from bluesky.protocols import Movable
 from ophyd_async.core import AsyncStatus, StandardReadable
-from ophyd_async.epics.signal import (
-    epics_signal_r,
-    epics_signal_rw,
-)
+from ophyd_async.epics.signal import epics_signal_r, epics_signal_rw
 
 
 class SetReadOnlyMotor(StandardReadable, Movable):
-    """Device that moves a motor with only set, read and stop
+    """Device that moves a motor with only setpoint and readback.
     Parameters
     ----------
     prefix:
         EPICS PV (None common part up to and including :).
     name:
         Name for the motor.
-    infix:
-        EPICS PV, default is the [".VAL", ".RBV"].
+    suffix:
+        Th last part of any EPICS PV, default is the [".VAL", ".RBV"].
     Notes
     -----
     Example usage::
@@ -32,13 +29,13 @@ class SetReadOnlyMotor(StandardReadable, Movable):
             suffix = [".VAL", ".RBV"]
         self.setpoint = epics_signal_rw(float, prefix + suffix[0])
         self.readback = epics_signal_r(float, prefix + suffix[1])
-        # self.stop_ = epics_signal_x(prefix + suffix[2])
+        self.units = epics_signal_r(str, prefix + ".EGU")
         # Whether set() should complete successfully or not
         self._set_success = True
         # Set name and signals for read() and read_configuration()
         self.set_readable_signals(
             read=[self.readback],
-            config=[],
+            config=[self.units],
         )
         super().__init__(name=name)
 
@@ -86,11 +83,3 @@ class SetReadOnlyMotor(StandardReadable, Movable):
         watchers: list[Callable] = []
         coro = asyncio.wait_for(self._move(value, watchers), timeout=timeout)
         return AsyncStatus(coro, watchers)
-
-
-"""    async def stop(self, success=False):
-        self._set_success = success
-        # Put with completion will never complete as we are waiting for completion on
-        # the move above, so need to pass wait=False
-        status = self.stop_.trigger(wait=False)
-        await status"""

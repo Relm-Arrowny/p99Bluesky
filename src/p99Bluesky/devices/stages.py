@@ -21,7 +21,7 @@ class XYZStage(Device):
     -----
     Example usage::
         async with DeviceCollector():
-        xyz_stage = XYZSTAGE("BLXX-MO-STAGE-XX:")
+        xyz_stage = XYZStage("BLXX-MO-STAGE-XX:")
 
     """
 
@@ -37,8 +37,8 @@ class XYZStage(Device):
 class SingleBasicStage(Device):
     """
 
-    Standard ophyd_async basic single stage, This stage contain only value and redback.
-    This is quite common for example single piezo driver on mirrors.
+    Standard ophyd_async basic single stage, This stage contain only value and readback
+    (no stop). This is quite common for example single piezo driver on mirrors.
 
     Parameters
     ----------
@@ -46,13 +46,17 @@ class SingleBasicStage(Device):
         EPICS PV (None common part up to and including :).
     name:
         name for the stage.
-    infix:
-        EEPICS PV, default is the [".VAL", ".RBV"].
+    suffix:
+        EPICS PV, default is the [".VAL", ".RBV"].
+        Mostly use for correct non-standard pv
     Notes
     -----
     Example usage::
         async with DeviceCollector():
             piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:")
+    Or::
+        DeviceCollector():
+            piezo1 = SingleBasicStage("BLXX-MO-STAGE-XX:", suffix = [".stupid", ".Pv"])
 
     """
 
