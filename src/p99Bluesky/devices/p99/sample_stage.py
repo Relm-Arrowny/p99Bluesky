@@ -15,6 +15,3 @@ class SampleAngleStage(Device):
             prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
         )
         super().__init__(name=name)
-
-
-

@@ -29,7 +29,7 @@ class SetReadOnlyMotor(StandardReadable, Movable):
             suffix = [".VAL", ".RBV", ".EGU"]
         self.setpoint = epics_signal_rw(float, prefix + suffix[0])
         self.readback = epics_signal_r(float, prefix + suffix[1])
-        self.units = epics_signal_r(str, prefix  + suffix[2])
+        self.units = epics_signal_r(str, prefix + suffix[2])
         # Whether set() should complete successfully or not
         self._set_success = True
         # Set name and signals for read() and read_configuration()
