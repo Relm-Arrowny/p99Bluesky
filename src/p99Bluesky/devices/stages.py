@@ -1,7 +1,7 @@
 from ophyd_async.core import Device
 from ophyd_async.epics.motion.motor import Motor
 
-from p99Bluesky.devices.epics.set_read_only_motor import SetReadOnlyMotor
+from p99Bluesky.devices.epics.setReadOnlyMotor import SetReadOnlyMotor
 
 
 class ThreeAxisStage(Device):

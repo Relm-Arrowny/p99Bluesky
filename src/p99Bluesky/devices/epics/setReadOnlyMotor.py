@@ -27,30 +27,30 @@ class SetReadOnlyMotor(StandardReadable, Movable):
         # Define some signals
         if suffix is None:
             suffix = [".VAL", ".RBV", ".EGU"]
-        self.setpoint = epics_signal_rw(float, prefix + suffix[0])
-        self.readback = epics_signal_r(float, prefix + suffix[1])
-        self.units = epics_signal_r(str, prefix + suffix[2])
+        self.user_setpoint = epics_signal_rw(float, prefix + suffix[0])
+        self.user_readback = epics_signal_r(float, prefix + suffix[1])
+        self.motor_egu = epics_signal_r(str, prefix + suffix[2])
         # Whether set() should complete successfully or not
         self._set_success = True
         # Set name and signals for read() and read_configuration()
         self.set_readable_signals(
-            read=[self.readback],
-            config=[self.units],
+            read=[self.user_readback],
+            config=[self.motor_egu],
         )
         super().__init__(name=name)
 
     def set_name(self, name: str):
         super().set_name(name)
         # Readback should be named the same as its parent in read()
-        self.readback.set_name(name)
+        self.user_readback.set_name(name)
 
     async def _move(self, new_position: float, watchers: list[Callable] | None = None):
         if watchers is None:
             watchers = []
         self._set_success = True
         start = time.monotonic()
-        old_position = await asyncio.gather(
-            self.setpoint.get_value(),
+        old_position, units = await asyncio.gather(
+            self.user_setpoint.get_value(), self.motor_egu.get_value()
         )
 
         def update_watchers(current_position: float):
@@ -60,14 +60,15 @@ class SetReadOnlyMotor(StandardReadable, Movable):
                     current=current_position,
                     initial=old_position,
                     target=new_position,
+                    unit=units,
                     time_elapsed=time.monotonic() - start,
                 )
 
-        self.readback.subscribe_value(update_watchers)
+        self.user_readback.subscribe_value(update_watchers)
         try:
-            await self.setpoint.set(new_position)
+            await self.user_setpoint.set(new_position)
         finally:
-            self.readback.clear_sub(update_watchers)
+            self.user_readback.clear_sub(update_watchers)
         if not self._set_success:
             raise RuntimeError("Motor was stopped")
 

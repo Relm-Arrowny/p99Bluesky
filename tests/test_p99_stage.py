@@ -19,3 +19,6 @@ async def sim_p99SampleStage():
 
 async def test_sim_p99SampleStage(sim_p99SampleStage: SampleAngleStage) -> None:
     assert sim_p99SampleStage.name == "p99_stage"
+    assert sim_p99SampleStage.theta.name == "p99_stage-theta"
+    assert sim_p99SampleStage.roll.name == "p99_stage-roll"
+    assert sim_p99SampleStage.pitch.name == "p99_stage-pitch"
