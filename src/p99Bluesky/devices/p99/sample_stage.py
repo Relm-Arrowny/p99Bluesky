@@ -6,26 +6,15 @@ from p99Bluesky.devices.epics.set_read_only_motor import SetReadOnlyMotor
 class SampleAngleStage(Device):
     def __init__(self, prefix: str, name: str):
         self.theta = SetReadOnlyMotor(
-            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV"]
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
         )
         self.roll = SetReadOnlyMotor(
-            prefix, name, suffix=["WRITEROLL", "WRITEROLL:RBV"]
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
         )
         self.pitch = SetReadOnlyMotor(
-            prefix, name, suffix=["WRITEPITCH", "WRITEPITCH:RBV"]
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
         )
         super().__init__(name=name)
 
 
-"""        PitchRollStage.__init__(self, prefix=prefix + "WRITE", name=name)
-        self.pitch.setpoint = epics_signal_rw(float, prefix)
-        self.roll.setpoint = epics_signal_rw(float, prefix)
-        XYZRealwVirStage.__init__(self, prefix=prefix, name=name, infix="Lab:")
-        self.x.setpoint = epics_signal_rw(float, prefix)
-        self.y.setpoint = epics_signal_rw(float, prefix)
-        self.z.setpoint = epics_signal_rw(float, prefix)
-        self.virtualx.setpoint = epics_signal_rw(float, prefix)
-        self.virtualy.setpoint = epics_signal_rw(float, prefix)
-        self.virtualz.setpoint = epics_signal_rw(float, prefix)
-        SelectableStage.__init__(self, prefix=prefix, name=name)
-        self.select.setpoint = epics_signal_rw(float, prefix)"""
+
