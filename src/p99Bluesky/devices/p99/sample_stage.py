@@ -1,63 +1,45 @@
-from ophyd_async.epics.signal.signal import epics_signal_rw
+from enum import Enum
 
-from p99Bluesky.devices.stages import (
-    PitchRollStage,
-    SelectableStage,
-    ThetaStage,
-    XYZRealwVirStage,
-)
+from ophyd_async.core import Device
+from ophyd_async.epics.signal import epics_signal_rw
 
-"""
-class P99Motor(Motor):
-    def __init__(self, prefix: str, name="") -> None:
-        super().__init__(prefix, name)
-        self.setpoint = epics_signal_rw(float, prefix)
+from p99Bluesky.devices.epics.setReadOnlyMotor import SetReadOnlyMotor
 
 
-class XYZStage(Device):
+class SampleAngleStage(Device):
     def __init__(self, prefix: str, name: str):
-        self.x = P99Motor(prefix + "X")
-        self.y = P99Motor(prefix + "Y")
-        self.z = P99Motor(prefix + "Z")
-        Device.__init__(self, name=name)
+        self.theta = SetReadOnlyMotor(
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
+        )
+        self.roll = SetReadOnlyMotor(
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
+        )
+        self.pitch = SetReadOnlyMotor(
+            prefix, name, suffix=["WRITETHETA", "WRITETHETA:RBV", "WRITETHETA.EGU"]
+        )
+        super().__init__(name=name)
 
 
-class PitchRollStage(Device):
+class p99StageSelections(str, Enum):
+    Empty = ("Empty",)
+    Mn5um = ("Mn 5um",)
+    Fe = ("Fe (empty)",)
+    Co5um = ("Co 5um",)
+    Ni5um = ("Ni 5um",)
+    Cu5um = ("Cu 5um",)
+    Zn5um = ("Zn 5um",)
+    Zr = ("Zr (empty)",)
+    Mo = ("Mo (empty)",)
+    Rh = ("Rh (empty)",)
+    Pd = ("Pd (empty)",)
+    Ag = ("Ag (empty)",)
+    Cd25um = ("Cd 25um",)
+    W = ("W (empty)",)
+    Pt = ("Pt (empty)",)
+    User = ("User",)
+
+
+class FilterMotor(Device):
     def __init__(self, prefix: str, name: str):
-        self.pitch = P99Motor(prefix + "PITCH")
-        self.roll = P99Motor(prefix + "ROLL")
-        Device.__init__(self, name=name)
-
-
-class SelectableStage(Device):
-    def __init__(self, prefix: str, name: str):
-        self.select = P99Motor(prefix + "MP:SELECT")
-        Device.__init__(self, name=name)
-
-
-class XYZRealwVirStage(XYZStage):
-    def __init__(self, prefix: str, name: str, infix: str):
-        self.virtualx = P99Motor(prefix + infix + "X")
-        self.virtualy = P99Motor(prefix + infix + "Y")
-        self.virtualz = P99Motor(prefix + infix + "Z")
-        XYZStage.__init__(self, prefix=prefix, name=name)
-
-"""
-
-
-class SampleStage(ThetaStage, PitchRollStage, XYZRealwVirStage, SelectableStage):
-    def __init__(self, prefix: str, name: str):
-        ThetaStage.__init__(self, prefix=prefix + "WRITE", name=name)
-        self.theta.setpoint = epics_signal_rw(float, prefix)
-        PitchRollStage.__init__(self, prefix=prefix + "WRITE", name=name)
-        self.pitch.setpoint = epics_signal_rw(float, prefix)
-        self.roll.setpoint = epics_signal_rw(float, prefix)
-        XYZRealwVirStage.__init__(self, prefix=prefix, name=name, infix="Lab:")
-        self.x.setpoint = epics_signal_rw(float, prefix)
-        self.y.setpoint = epics_signal_rw(float, prefix)
-        self.z.setpoint = epics_signal_rw(float, prefix)
-        self.virtualx.setpoint = epics_signal_rw(float, prefix)
-        self.virtualy.setpoint = epics_signal_rw(float, prefix)
-        self.virtualz.setpoint = epics_signal_rw(float, prefix)
-        SelectableStage.__init__(self, prefix=prefix, name=name)
-        self.select.setpoint = epics_signal_rw(float, prefix)
+        self.user_setpoint = epics_signal_rw(p99StageSelections, prefix)
+        super().__init__(name=name)

@@ -1,7 +1,12 @@
 import pytest
 from ophyd_async.core import DeviceCollector
+from ophyd_async.core.signal import set_sim_value
 
-from p99Bluesky.devices.p99.sample_stage import SampleStage
+from p99Bluesky.devices.p99.sample_stage import (
+    FilterMotor,
+    SampleAngleStage,
+    p99StageSelections,
+)
 
 # Long enough for multiple asyncio event loop cycles to run so
 # all the tasks have a chance to run
@@ -9,22 +14,30 @@ A_BIT = 0.001
 
 
 @pytest.fixture
-async def sim_p99SampleStage():
+async def sim_sampleAngleStage():
     async with DeviceCollector(sim=True):
-        sim_p99SampleStage = SampleStage("p99-MO-TABLE-01:", "p99Stage")
+        sim_sampleAngleStage = SampleAngleStage(
+            "p99-MO-TABLE-01:", name="sim_sampleAngleStage"
+        )
         # Signals connected here
-
-    assert sim_p99SampleStage.name == "p99Stage"
-    yield sim_p99SampleStage
+    yield sim_sampleAngleStage
 
 
-async def test_sim_p99SampleStage(sim_p99SampleStage: SampleStage) -> None:
-    assert sim_p99SampleStage.theta.name == "p99Stage-theta"
-    assert sim_p99SampleStage.pitch.name == "p99Stage-pitch"
-    assert sim_p99SampleStage.roll.name == "p99Stage-roll"
-    assert sim_p99SampleStage.x.name == "p99Stage-x"
-    assert sim_p99SampleStage.y.name == "p99Stage-y"
-    assert sim_p99SampleStage.z.name == "p99Stage-z"
-    assert sim_p99SampleStage.virtualx.name == "p99Stage-virtualx"
-    assert sim_p99SampleStage.virtualy.name == "p99Stage-virtualy"
-    assert sim_p99SampleStage.virtualz.name == "p99Stage-virtualz"
+@pytest.fixture
+async def sim_filter_wheel():
+    async with DeviceCollector(sim=True):
+        sim_filter_wheel = FilterMotor("p99-MO-TABLE-01:", name="sim_filter_wheel")
+    yield sim_filter_wheel
+
+
+async def test_sampleAngleStage(sim_sampleAngleStage: SampleAngleStage) -> None:
+    assert sim_sampleAngleStage.name == "sim_sampleAngleStage"
+    assert sim_sampleAngleStage.theta.name == "sim_sampleAngleStage-theta"
+    assert sim_sampleAngleStage.roll.name == "sim_sampleAngleStage-roll"
+    assert sim_sampleAngleStage.pitch.name == "sim_sampleAngleStage-pitch"
+
+
+async def test_filter_wheel(sim_filter_wheel: FilterMotor) -> None:
+    assert sim_filter_wheel.name == "sim_filter_wheel"
+    set_sim_value(sim_filter_wheel.user_setpoint, p99StageSelections.Cd25um)
+    assert await sim_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
