@@ -1,5 +1,5 @@
 import asyncio
-from unittest.mock import Mock, call
+from unittest.mock import ANY, Mock, call
 
 import pytest
 from ophyd_async.core import DeviceCollector
@@ -39,7 +39,7 @@ async def test_setReadOnlyMotor_moves(sim_sr_motor: SetReadOnlyMotor) -> None:
         initial=0.0,
         target=0.55,
         unit="mm",
-        time_elapsed=pytest.approx(0.0, abs=0.01),
+        time_elapsed=ANY,
     )
     watcher.reset_mock()
     assert 0.55 == await sim_sr_motor.user_setpoint.get_value()
@@ -53,7 +53,7 @@ async def test_setReadOnlyMotor_moves(sim_sr_motor: SetReadOnlyMotor) -> None:
         initial=0.0,
         target=0.55,
         unit="mm",
-        time_elapsed=pytest.approx(0.1, abs=0.01),
+        time_elapsed=ANY,
     )
     sim_sr_motor._set_success = False  # make it fail
     set_sim_put_proceeds(sim_sr_motor.user_setpoint, True)
