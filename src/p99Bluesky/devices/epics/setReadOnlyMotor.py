@@ -3,7 +3,7 @@ import time
 from collections.abc import Callable
 
 from bluesky.protocols import Movable
-from ophyd_async.core import AsyncStatus, StandardReadable
+from ophyd_async.core import AsyncStatus, ConfigSignal, HintedSignal, StandardReadable
 from ophyd_async.epics.signal import epics_signal_r, epics_signal_rw
 
 
@@ -28,15 +28,12 @@ class SetReadOnlyMotor(StandardReadable, Movable):
         if suffix is None:
             suffix = [".VAL", ".RBV", ".EGU"]
         self.user_setpoint = epics_signal_rw(float, prefix + suffix[0])
-        self.user_readback = epics_signal_r(float, prefix + suffix[1])
-        self.motor_egu = epics_signal_r(str, prefix + suffix[2])
+        with self.add_children_as_readables(HintedSignal):
+            self.user_readback = epics_signal_r(float, prefix + suffix[1])
+        with self.add_children_as_readables(ConfigSignal):
+            self.motor_egu = epics_signal_r(str, prefix + suffix[2])
         # Whether set() should complete successfully or not
         self._set_success = True
-        # Set name and signals for read() and read_configuration()
-        self.set_readable_signals(
-            read=[self.user_readback],
-            config=[self.motor_egu],
-        )
         super().__init__(name=name)
 
     def set_name(self, name: str):
