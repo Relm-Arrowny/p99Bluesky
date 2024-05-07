@@ -29,7 +29,8 @@ class Andor2Controller(DetectorControl):
         self.good_states = good_states
 
     def get_deadtime(self, exposure: float) -> float:
-        return exposure + 0.1  # this need to be fix and check
+        # dt = await asyncio.gather(self.driver.accumulate_period.get_value())
+        return exposure + 0.2
 
     async def arm(
         self,
