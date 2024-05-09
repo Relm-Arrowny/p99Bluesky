@@ -48,7 +48,7 @@ dev = [
     "sphinx-design",
     "tox-direct",
     "types-mock",
-    "ophyd_async@git+https://github.com/bluesky/ophyd-async.git",
+    "ophyd_async",#@git+https://github.com/bluesky/ophyd-async.git",
     "pytest-asyncio",
     #===========================
     "h5py",
@@ -66,7 +66,7 @@ dev = [
     "softioc",
     "cothread",
     #"dls-dodal",
-    "dls-dodal@git+https://github.com/DiamondLightSource/dodal.git",
+    "dls-dodal",#@git+https://github.com/DiamondLightSource/dodal.git",
 ]
 
 [project.scripts]
