@@ -13,7 +13,7 @@ classifiers = [
 description = "p99 sandbox"
 dependencies = [
     "ophyd",
-    "ophyd-async>=0.3a1",
+    "ophyd-async>=0.3a5",
     "bluesky",
     "pyepics",
     "dataclasses-json",
@@ -26,6 +26,7 @@ dependencies = [
     "aioca",                  # Required for CA support with ophyd-async.
     "p4p",                    # Required for PVA support with ophyd-async.
     "numpy",
+    "dls-dodal>=1.25",
 ]
 dynamic = ["version"]
 license.file = "LICENSE"
@@ -48,7 +49,6 @@ dev = [
     "sphinx-design",
     "tox-direct",
     "types-mock",
-    "ophyd_async@git+https://github.com/bluesky/ophyd-async.git",
     "pytest-asyncio",
     #===========================
     "h5py",
@@ -65,7 +65,7 @@ dev = [
     "jupyter",
     "softioc",
     "cothread",
-    "dls-dodal@git+https://github.com/DiamondLightSource/dodal.git",
+
 ]
 
 [project.scripts]
