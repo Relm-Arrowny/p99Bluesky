@@ -4,7 +4,7 @@ import pytest
 from ophyd_async.core import (
     DetectorTrigger,
     DeviceCollector,
-    set_sim_value,
+    set_mock_value,
 )
 from ophyd_async.epics.areadetector.controllers import (
     ADSimController,
@@ -18,7 +18,7 @@ from p99Bluesky.devices.epics.drivers.andor2_driver import Andor2Driver, Trigger
 
 @pytest.fixture
 async def Andor(RE) -> Andor2Controller:
-    async with DeviceCollector(sim=True):
+    async with DeviceCollector(mock=True):
         drv = Andor2Driver("DRIVER:")
         controller = Andor2Controller(drv)
 
@@ -27,7 +27,7 @@ async def Andor(RE) -> Andor2Controller:
 
 @pytest.fixture
 async def ad(RE) -> ADSimController:
-    async with DeviceCollector(sim=True):
+    async with DeviceCollector(mock=True):
         drv = ADBase("DRIVER:")
         controller = ADSimController(drv)
 
@@ -40,7 +40,7 @@ async def test_Andor_controller(RE, Andor: Andor2Controller):
 
     driver = Andor.driver
 
-    set_sim_value(driver.accumulate_period, 1)
+    set_mock_value(driver.accumulate_period, 1)
     assert await driver.num_images.get_value() == 1
     assert await driver.image_mode.get_value() == ImageMode.multiple
     assert await driver.trigger_mode.get_value() == TriggerMode.internal

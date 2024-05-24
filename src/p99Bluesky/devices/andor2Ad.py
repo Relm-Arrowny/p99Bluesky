@@ -8,7 +8,9 @@ from ophyd_async.epics.areadetector.drivers import ADBaseShapeProvider
 from ophyd_async.epics.areadetector.writers import HDFWriter, NDFileHDF
 
 from p99Bluesky.devices.epics.andor2_controller import Andor2Controller
+from p99Bluesky.devices.epics.andor3_controller import Andor3Controller
 from p99Bluesky.devices.epics.drivers.andor2_driver import Andor2Driver
+from p99Bluesky.devices.epics.drivers.andor3_driver import Andor3Driver
 
 
 class StaticDirectoryProviderPlus:
@@ -52,6 +54,41 @@ class Andor2Ad(StandardDetector):
 
         super().__init__(
             Andor2Controller(self.drv),
+            HDFWriter(
+                self.hdf,
+                directory_provider,
+                lambda: self.name,
+                ADBaseShapeProvider(self.drv),
+                sum="StatsTotal",
+                **scalar_sigs,
+            ),
+            config_sigs=config_sigs,
+            name=name,
+        )
+
+    @property
+    def hints(self) -> Hints:
+        return self._writer.hints
+
+
+class Andor3Ad(StandardDetector):
+    _controller: Andor3Controller
+    _writer: HDFWriter
+
+    def __init__(
+        self,
+        prefix: str,
+        directory_provider: DirectoryProvider,
+        name: str,
+        config_sigs: Sequence[SignalR] = (),
+        **scalar_sigs: str,
+    ):
+        self.drv = Andor3Driver(prefix + "CAM:")
+        self.hdf = NDFileHDF(prefix + "HDF5:")
+        self.counter = 0
+
+        super().__init__(
+            Andor3Controller(self.drv),
             HDFWriter(
                 self.hdf,
                 directory_provider,
