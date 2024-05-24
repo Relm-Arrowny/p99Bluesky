@@ -8,8 +8,8 @@ from ophyd_async.epics.areadetector.drivers.ad_base import (
 )
 from ophyd_async.epics.areadetector.utils import stop_busy_record
 
-from p99Bluesky.devices.epics.drivers.andor2_driver import (
-    Andor2Driver,
+from p99Bluesky.devices.epics.drivers.andor3_driver import (
+    Andor3Driver,
     ImageMode,
     TriggerMode,
 )
@@ -21,10 +21,10 @@ TRIGGER_MODE = {
 }
 
 
-class Andor2Controller(DetectorControl):
+class Andor3Controller(DetectorControl):
     def __init__(
         self,
-        driver: Andor2Driver,
+        driver: Andor3Driver,
         good_states: set[DetectorState] | None = None,
     ) -> None:
         if good_states is None:
@@ -43,7 +43,7 @@ class Andor2Controller(DetectorControl):
     ) -> AsyncStatus:
         funcs = [
             self.driver.num_images.set(999_999 if num == 0 else num),
-            self.driver.image_mode.set(ImageMode.multiple),
+            self.driver.image_mode.set(ImageMode.fixed),
             self.driver.trigger_mode.set(TRIGGER_MODE[trigger]),
         ]
         if exposure is not None:

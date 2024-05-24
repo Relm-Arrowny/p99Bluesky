@@ -1,6 +1,5 @@
 import pytest
-from ophyd_async.core import DeviceCollector
-from ophyd_async.core.signal import set_sim_value
+from ophyd_async.core import DeviceCollector, set_mock_value
 
 from p99Bluesky.devices.p99.sample_stage import (
     FilterMotor,
@@ -14,30 +13,32 @@ A_BIT = 0.001
 
 
 @pytest.fixture
-async def sim_sampleAngleStage():
-    async with DeviceCollector(sim=True):
-        sim_sampleAngleStage = SampleAngleStage(
-            "p99-MO-TABLE-01:", name="sim_sampleAngleStage"
+async def mock_sampleAngleStage():
+    async with DeviceCollector(mock=True):
+        mock_sampleAngleStage = SampleAngleStage(
+            "p99-MO-TABLE-01:", name="mock_sampleAngleStage"
         )
         # Signals connected here
-    yield sim_sampleAngleStage
+    yield mock_sampleAngleStage
 
 
 @pytest.fixture
-async def sim_filter_wheel():
-    async with DeviceCollector(sim=True):
-        sim_filter_wheel = FilterMotor("p99-MO-TABLE-01:", name="sim_filter_wheel")
-    yield sim_filter_wheel
+async def mock_filter_wheel():
+    async with DeviceCollector(mock=True):
+        mock_filter_wheel = FilterMotor("p99-MO-TABLE-01:", name="mock_filter_wheel")
+    yield mock_filter_wheel
 
 
-async def test_sampleAngleStage(sim_sampleAngleStage: SampleAngleStage) -> None:
-    assert sim_sampleAngleStage.name == "sim_sampleAngleStage"
-    assert sim_sampleAngleStage.theta.name == "sim_sampleAngleStage-theta"
-    assert sim_sampleAngleStage.roll.name == "sim_sampleAngleStage-roll"
-    assert sim_sampleAngleStage.pitch.name == "sim_sampleAngleStage-pitch"
+async def test_sampleAngleStage(mock_sampleAngleStage: SampleAngleStage) -> None:
+    assert mock_sampleAngleStage.name == "mock_sampleAngleStage"
+    assert mock_sampleAngleStage.theta.name == "mock_sampleAngleStage-theta"
+    assert mock_sampleAngleStage.roll.name == "mock_sampleAngleStage-roll"
+    assert mock_sampleAngleStage.pitch.name == "mock_sampleAngleStage-pitch"
 
 
-async def test_filter_wheel(sim_filter_wheel: FilterMotor) -> None:
-    assert sim_filter_wheel.name == "sim_filter_wheel"
-    set_sim_value(sim_filter_wheel.user_setpoint, p99StageSelections.Cd25um)
-    assert await sim_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
+async def test_filter_wheel(mock_filter_wheel: FilterMotor) -> None:
+    assert mock_filter_wheel.name == "mock_filter_wheel"
+    set_mock_value(mock_filter_wheel.user_setpoint, p99StageSelections.Cd25um)
+    assert (
+        await mock_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
+    )
