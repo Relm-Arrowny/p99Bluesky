@@ -46,6 +46,7 @@ dev = [
     "sphinx-design",
     "sphinxcontrib-mermaid",
     "sphinxcontrib-openapi",
+    "sphinx-click",
     "tox-direct",
     "types-mock",
     "pytest-asyncio",
