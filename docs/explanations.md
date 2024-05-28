@@ -2,9 +2,9 @@
 
 Explanations of how it works and why it works that way.
 
-```{toctree}
+{toctree}
 :maxdepth: 1
 :glob:
 
 explanations/*
-```
+
