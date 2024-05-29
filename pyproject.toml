@@ -21,6 +21,7 @@ dependencies = [
 
     #usefull stuff for testing or running without blue api
     "jupyter",
+    "ipython",
     "matplotlib",
     "numpy",
     "pyepics",
