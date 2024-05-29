@@ -48,9 +48,7 @@ async def test_Andor_controller(RE, Andor: Andor2Controller):
     assert await driver.acquire_time.get_value() == 0.002
     # assert await Andor.get_deadtime(2) == 1
 
-    with patch(
-        "ophyd_async.epics.areadetector.utils.wait_for_value", return_value=None
-    ):
+    with patch("ophyd_async.epics.areadetector.utils.wait_for_value", return_value=None):
         await Andor.disarm()
 
     assert await driver.acquire.get_value() is False

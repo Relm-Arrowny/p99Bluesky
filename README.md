@@ -3,12 +3,10 @@
 [![PyPI](https://img.shields.io/pypi/v/p99Bluesky.svg)](https://pypi.org/project/p99Bluesky)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-# p99Bluesky
+# P99Bluesky
 
-p99 sandbox
+This module provides a complete offline environment for beamline p99. It includes everything you need to get started, such as Bluesky plans for defining experiments, Ophyd-asynio for controlling hardware devices, and Blueapi for interacting with Bluesky programmatically. Additionally, it comes bundled with all the necessary modules to run p99 within an IPython terminal.
 
-This is where you should write a short paragraph that describes what your module does,
-how it does it, and why people should use it.
 
 Source          | <https://github.com/Relm-Arrowny/p99Bluesky>
 :---:           | :---:
@@ -16,20 +14,15 @@ PyPI            | `pip install p99Bluesky`
 Documentation   | <https://relm-arrowny.github.io/p99Bluesky>
 Releases        | <https://github.com/Relm-Arrowny/p99Bluesky/releases>
 
-This is where you should put some images or code snippets that illustrate
-some relevant examples. If it is a library then you might put some
-introductory code here:
+This repository can also serve as a configuration source for a p99 instance of BlueAPI. It offers both planFunctions and deviceFunctions, streamlining the setup process.
 
-```python
-from p99Bluesky import __version__
-
-print(f"Hello p99Bluesky {__version__}")
-```
-
-Or if it is a commandline tool then you might put some example commands here:
-
-```
-python -m p99Bluesky --version
+``` yaml
+    env:
+      sources:
+        - kind: planFunctions
+          module: P99Bluesky.plans
+        - kind: deviceFunctions
+          module: p99Bluesky.beamlines.p99 
 ```
 
 <!-- README only content. Anything below this line won't be included in index.md -->

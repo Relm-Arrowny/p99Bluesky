@@ -46,6 +46,10 @@ extensions = [
     "sphinx_design",
     # So we can write markdown files
     "myst_parser",
+    # OpenAPI directive
+    "sphinxcontrib.openapi",
+    # For documenting the CLI
+    "sphinx_click.ext",
 ]
 
 # So we can use the ::: syntax
@@ -158,7 +162,7 @@ html_theme_options = {
         "json_url": switcher_json,
         "version_match": version,
     },
-    "check_switcher": False,
+    "check_switcher": True,
     "navbar_end": ["theme-switcher", "icon-links", "version-switcher"],
     "navigation_with_keys": False,
 }

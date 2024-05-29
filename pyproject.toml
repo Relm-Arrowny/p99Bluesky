@@ -12,21 +12,19 @@ classifiers = [
 ]
 description = "p99 sandbox"
 dependencies = [
+    #Things that are neeeded for running
+    "blueapi",
     "ophyd",
     "ophyd-async>=0.3a5",
     "bluesky",
-    "pyepics",
-    "dataclasses-json",
-    "pillow",
-    "zocalo",
-    "requests",
-    "graypy",
-    "pydantic",
-    "opencv-python-headless", # For pin-tip detection.
-    "aioca",                  # Required for CA support with ophyd-async.
-    "p4p",                    # Required for PVA support with ophyd-async.
+    "dls-dodal>=1.25.0",
+
+    #usefull stuff for testing or running without blue api
+    "jupyter",
+    "ipython",
+    "matplotlib",
     "numpy",
-    "dls-dodal>=1.25",
+    "pyepics",
 ]
 dynamic = ["version"]
 license.file = "LICENSE"
@@ -47,6 +45,9 @@ dev = [
     "sphinx-autobuild",
     "sphinx-copybutton",
     "sphinx-design",
+    "sphinxcontrib-mermaid",
+    "sphinxcontrib-openapi",
+    "sphinx-click",
     "tox-direct",
     "types-mock",
     "pytest-asyncio",
@@ -54,7 +55,6 @@ dev = [
     "h5py",
     "ipython",
     "ipywidgets",
-    "matplotlib",
     "numpydoc",
     "pickleshare",
     "pyside6",
@@ -62,7 +62,6 @@ dev = [
     "pytest-rerunfailures",
     "pytest-timeout",
     "types-pyyaml",
-    "jupyter",
     "softioc",
     "cothread",
 
@@ -130,7 +129,7 @@ commands =
 
 [tool.ruff]
 src = ["src", "tests"]
-line-length = 88
+line-length = 90
 lint.select = [
     "B",  # flake8-bugbear - https://docs.astral.sh/ruff/rules/#flake8-bugbear-b
     "C4", # flake8-comprehensions - https://docs.astral.sh/ruff/rules/#flake8-comprehensions-c4
