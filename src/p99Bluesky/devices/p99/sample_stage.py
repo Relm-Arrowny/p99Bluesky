@@ -9,9 +9,7 @@ class SampleAngleStage(Device):
         self.theta = epics_signal_rw(
             float, prefix + "WRITETHETA:RBV", prefix + "WRITETHETA"
         )
-        self.roll = epics_signal_rw(
-            float, prefix + "WRITEROLL:RBV", prefix + "WRITEROLL"
-        )
+        self.roll = epics_signal_rw(float, prefix + "WRITEROLL:RBV", prefix + "WRITEROLL")
         self.pitch = epics_signal_rw(
             float, prefix + "WRITEPITCH:RBV", prefix + "WRITEPITCH"
         )

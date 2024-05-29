@@ -39,6 +39,4 @@ async def test_sampleAngleStage(mock_sampleAngleStage: SampleAngleStage) -> None
 async def test_filter_wheel(mock_filter_wheel: FilterMotor) -> None:
     assert mock_filter_wheel.name == "mock_filter_wheel"
     set_mock_value(mock_filter_wheel.user_setpoint, p99StageSelections.Cd25um)
-    assert (
-        await mock_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
-    )
+    assert await mock_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um

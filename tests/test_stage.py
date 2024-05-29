@@ -7,9 +7,7 @@ from p99Bluesky.devices.stages import ThreeAxisStage
 @pytest.fixture
 async def mock_three_axis_motor():
     async with DeviceCollector(mock=True):
-        mock_three_axis_motor = ThreeAxisStage(
-            "BLxx-MO-xx-01:", "mock_three_axis_motor"
-        )
+        mock_three_axis_motor = ThreeAxisStage("BLxx-MO-xx-01:", "mock_three_axis_motor")
         # Signals connected here
 
     yield mock_three_axis_motor

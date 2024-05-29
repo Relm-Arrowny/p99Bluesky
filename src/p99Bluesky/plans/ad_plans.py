@@ -37,9 +37,7 @@ class AdPlan:
         @bpp.run_decorator()
         def innerTakeImg():
             yield from bps.declare_stream(self.det, name="primary")
-            yield from bps.prepare(
-                self.det, self._getTriggerInfo(), group=grp, wait=True
-            )
+            yield from bps.prepare(self.det, self._getTriggerInfo(), group=grp, wait=True)
             yield from bps.kickoff(self.det, group=grp, wait=True)
 
             yield from bps.wait(group=grp)
