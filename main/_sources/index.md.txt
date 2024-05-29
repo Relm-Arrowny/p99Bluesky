@@ -6,7 +6,6 @@ html_theme.sidebar_secondary.remove: true
 :end-before: <!-- README only content
 ```
 
-
 How the documentation is structured
 -----------------------------------
 
