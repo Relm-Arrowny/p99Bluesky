@@ -1,6 +1,7 @@
 import pytest
 from ophyd_async.core import DeviceCollector
-from p99Bluesky.devices.stages import ThreeAxisStage
+
+from p99_bluesky.devices.stages import ThreeAxisStage
 
 
 @pytest.fixture

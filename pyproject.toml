@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "p99_bluesky"
+name = "p99-bluesky"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
@@ -68,10 +68,10 @@ dev = [
 ]
 
 [project.scripts]
-p99_bluesky = "p99_bluesky.__main__:main"
+p99-bluesky = "p99_bluesky.__main__:main"
 
 [project.urls]
-GitHub = "https://github.com/Relm-Arrowny/p99_bluesky"
+GitHub = "https://github.com/DiamondLightSource/p99-bluesky"
 
 [[project.authors]] # Further authors may be added by duplicating this section
 email = "raymond.fan@diamond.ac.uk"
