@@ -5,12 +5,12 @@ author_email: raymond.fan@diamond.ac.uk
 author_name: Raymond Fan
 component_owner: group:default/sscc
 description: p99 sandbox
-distribution_name: p99Bluesky
+distribution_name: p99_bluesky
 docker: false
 docs_type: sphinx
 git_platform: github.com
 github_org: Relm-Arrowny
-package_name: p99Bluesky
+package_name: p99_bluesky
 pypi: true
-repo_name: p99Bluesky
+repo_name: p99_bluesky
 type_checker: pyright

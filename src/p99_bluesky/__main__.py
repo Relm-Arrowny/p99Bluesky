@@ -11,6 +11,6 @@ def main(args=None):
     args = parser.parse_args(args)
 
 
-# test with: python -m p99Bluesky
+# test with: python -m p99_bluesky
 if __name__ == "__main__":
     main()
