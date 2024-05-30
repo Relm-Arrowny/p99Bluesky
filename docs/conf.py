@@ -10,15 +10,15 @@ from subprocess import check_output
 
 import requests
 
-import p99Bluesky
+import p99_bluesky
 
 # -- General configuration ------------------------------------------------
 
 # General information about the project.
-project = "p99Bluesky"
+project = "p99_bluesky"
 
 # The full version, including alpha/beta/rc tags.
-release = p99Bluesky.__version__
+release = p99_bluesky.__version__
 
 # The short X.Y version.
 if "+" in release:
@@ -123,7 +123,7 @@ copybutton_prompt_is_regexp = True
 # a list of builtin themes.
 #
 html_theme = "pydata_sphinx_theme"
-github_repo = "p99Bluesky"
+github_repo = "p99_bluesky"
 github_user = "Relm-Arrowny"
 switcher_json = f"https://{github_user}.github.io/{github_repo}/switcher.json"
 switcher_exists = requests.get(switcher_json).ok

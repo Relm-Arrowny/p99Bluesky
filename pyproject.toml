@@ -3,7 +3,7 @@ requires = ["setuptools>=64", "setuptools_scm[toml]>=6.2"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "p99Bluesky"
+name = "p99-bluesky"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: Apache Software License",
@@ -68,10 +68,10 @@ dev = [
 ]
 
 [project.scripts]
-p99Bluesky = "p99Bluesky.__main__:main"
+p99-bluesky = "p99_bluesky.__main__:main"
 
 [project.urls]
-GitHub = "https://github.com/Relm-Arrowny/p99Bluesky"
+GitHub = "https://github.com/DiamondLightSource/p99-bluesky"
 
 [[project.authors]] # Further authors may be added by duplicating this section
 email = "raymond.fan@diamond.ac.uk"
@@ -79,7 +79,7 @@ name = "Raymond Fan"
 
 
 [tool.setuptools_scm]
-write_to = "src/p99Bluesky/_version.py"
+write_to = "src/p99_bluesky/_version.py"
 
 [tool.pyright]
 reportMissingImports = false # Ignore missing stubs in imported modules
@@ -97,7 +97,7 @@ testpaths = "docs src tests"
 asyncio_mode = "auto"
 
 [tool.coverage.run]
-data_file = "/tmp/p99Bluesky.coverage"
+data_file = "/tmp/p99_bluesky.coverage"
 
 [tool.coverage.paths]
 # Tests are run from installed location, map back to the src directory
@@ -123,7 +123,7 @@ allowlist_externals =
 commands =
     pre-commit: pre-commit run --all-files {posargs}
     type-checking: pyright src tests {posargs}
-    tests: pytest --cov=p99Bluesky --cov-report term --cov-report xml:cov.xml {posargs}
+    tests: pytest --cov=p99_bluesky --cov-report term --cov-report xml:cov.xml {posargs}
     docs: sphinx-{posargs:build -EW --keep-going} -T docs build/html
 """
 

@@ -1,8 +1,8 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-  name: p99Bluesky
-  title: p99Bluesky
+  name: p99_bluesky
+  title: p99_bluesky
   description: p99 sandbox
 spec:
   type: documentation
