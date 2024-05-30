@@ -8,5 +8,5 @@ Technical reference material including APIs and release notes.
 
 reference/*
 genindex
-Release Notes <https://github.com/Relm-Arrowny/p99Bluesky/releases>
+Release Notes <https://github.com/Relm-Arrowny/p99_bluesky/releases>
 ```
