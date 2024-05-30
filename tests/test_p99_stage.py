@@ -1,6 +1,7 @@
 import pytest
 from ophyd_async.core import DeviceCollector, set_mock_value
-from p99Bluesky.devices.p99.sample_stage import (
+
+from p99_bluesky.devices.p99.sample_stage import (
     FilterMotor,
     SampleAngleStage,
     p99StageSelections,

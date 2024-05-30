@@ -7,7 +7,8 @@ from ophyd_async.epics.areadetector.drivers.ad_base import (
     start_acquiring_driver_and_ensure_status,
 )
 from ophyd_async.epics.areadetector.utils import stop_busy_record
-from p99Bluesky.devices.epics.drivers.andor3_driver import (
+
+from p99_bluesky.devices.epics.drivers.andor3_driver import (
     Andor3Driver,
     ImageMode,
     TriggerMode,

@@ -2,7 +2,8 @@ from bluesky import plan_stubs as bps
 from bluesky import preprocessors as bpp
 from bluesky.utils import Msg, short_uid
 from ophyd_async.core import DetectorTrigger, TriggerInfo
-from p99Bluesky.devices.andor2Ad import Andor2Ad
+
+from p99_bluesky.devices.andor2Ad import Andor2Ad
 
 """
     AdPlan store the state of an area detector and its associated functions.

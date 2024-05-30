@@ -2,8 +2,9 @@ from dodal.beamlines.beamline_utils import device_instantiation
 from dodal.beamlines.beamline_utils import set_beamline as set_utils_beamline
 from dodal.log import set_beamline as set_log_beamline
 from dodal.utils import get_beamline_name
-from p99Bluesky.devices.p99.sample_stage import FilterMotor, SampleAngleStage
-from p99Bluesky.devices.stages import ThreeAxisStage
+
+from p99_bluesky.devices.p99.sample_stage import FilterMotor, SampleAngleStage
+from p99_bluesky.devices.stages import ThreeAxisStage
 
 BL = get_beamline_name("99P")
 set_log_beamline(BL)

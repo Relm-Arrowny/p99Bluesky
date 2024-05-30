@@ -6,10 +6,11 @@ from ophyd_async.core import DirectoryProvider, SignalR, StandardDetector
 from ophyd_async.core._providers import DirectoryInfo
 from ophyd_async.epics.areadetector.drivers import ADBaseShapeProvider
 from ophyd_async.epics.areadetector.writers import HDFWriter, NDFileHDF
-from p99Bluesky.devices.epics.andor2_controller import Andor2Controller
-from p99Bluesky.devices.epics.andor3_controller import Andor3Controller
-from p99Bluesky.devices.epics.drivers.andor2_driver import Andor2Driver
-from p99Bluesky.devices.epics.drivers.andor3_driver import Andor3Driver
+
+from p99_bluesky.devices.epics.andor2_controller import Andor2Controller
+from p99_bluesky.devices.epics.andor3_controller import Andor3Controller
+from p99_bluesky.devices.epics.drivers.andor2_driver import Andor2Driver
+from p99_bluesky.devices.epics.drivers.andor3_driver import Andor3Driver
 
 
 class StaticDirectoryProviderPlus:
