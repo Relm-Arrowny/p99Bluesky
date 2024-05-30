@@ -10,7 +10,7 @@ This module provides a complete offline environment for beamline p99. It include
 
 Source          | <https://github.com/DiamondLightSource/p99-bluesky>
 :---:           | :---:
-PyPI            | `pip install p99-bluesky`
+PyPI            | `pip install p99_bluesky`
 Documentation   | <https://DiamondLightSource.github.io/p99-bluesky>
 Releases        | <https://github.com/DiamondLightSource/p99-bluesky/releases>
 
