@@ -1,7 +1,10 @@
+import asyncio
+import subprocess
+
 import pytest
 from ophyd_async.core import DeviceCollector, set_mock_value
 
-from p99Bluesky.devices.p99.sample_stage import (
+from p99_bluesky.devices.p99.sample_stage import (
     FilterMotor,
     SampleAngleStage,
     p99StageSelections,
@@ -40,3 +43,34 @@ async def test_filter_wheel(mock_filter_wheel: FilterMotor) -> None:
     assert mock_filter_wheel.name == "mock_filter_wheel"
     set_mock_value(mock_filter_wheel.user_setpoint, p99StageSelections.Cd25um)
     assert await mock_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
+
+
+async def test_soft_sampleAngleStage() -> None:
+    p = subprocess.Popen(
+        ["python", "/workspaces/p99-bluesky/tests/epics/softioc/p99_softioc.py"],
+        stdin=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+    )
+
+    async with DeviceCollector(mock=False):
+        mock_sampleAngleStage = SampleAngleStage(
+            "p99-MO-TABLE-01:", name="mock_sampleAngleStage"
+        )
+    assert mock_sampleAngleStage.name == "mock_sampleAngleStage"
+    assert mock_sampleAngleStage.theta.name == "mock_sampleAngleStage-theta"
+    assert mock_sampleAngleStage.roll.name == "mock_sampleAngleStage-roll"
+    assert mock_sampleAngleStage.pitch.name == "mock_sampleAngleStage-pitch"
+    await asyncio.gather(
+        mock_sampleAngleStage.theta.set(2),
+        mock_sampleAngleStage.pitch.set(3.1),
+        mock_sampleAngleStage.roll.set(4),
+    )
+    result = asyncio.gather(
+        mock_sampleAngleStage.theta.get_value(),
+        mock_sampleAngleStage.pitch.get_value(),
+        mock_sampleAngleStage.roll.get_value(),
+    )
+    await asyncio.wait_for(result, timeout=2)
+    assert result.result() == [2, 3.1, 4]
+    p.communicate(b"exit")
