@@ -47,7 +47,10 @@ async def test_filter_wheel(mock_filter_wheel: FilterMotor) -> None:
 
 async def test_soft_sampleAngleStage() -> None:
     p = subprocess.Popen(
-        ["python", "/workspaces/p99-bluesky/tests/epics/softioc/p99_softioc.py"],
+        [
+            "python",
+            "/workspaces/p99-bluesky/src/p99_bluesky/devices/epics/soft_ioc/p99_softioc.py",
+        ],
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
         stdout=subprocess.PIPE,
@@ -66,6 +69,7 @@ async def test_soft_sampleAngleStage() -> None:
         mock_sampleAngleStage.pitch.set(3.1),
         mock_sampleAngleStage.roll.set(4),
     )
+    # await asyncio.wait_for(result, timeout=2)
     result = asyncio.gather(
         mock_sampleAngleStage.theta.get_value(),
         mock_sampleAngleStage.pitch.get_value(),
