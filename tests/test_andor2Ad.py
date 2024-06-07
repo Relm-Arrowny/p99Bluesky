@@ -16,7 +16,7 @@ from ophyd_async.core import (
 )
 from ophyd_async.core._providers import DirectoryInfo
 
-from p99Bluesky.devices.andor2Ad import Andor2Ad, Andor3Ad, StaticDirectoryProviderPlus
+from p99_bluesky.devices.andor2Ad import Andor2Ad, Andor3Ad, StaticDirectoryProviderPlus
 
 CURRENT_DIRECTORY = "."  # str(Path(__file__).parent)
 
