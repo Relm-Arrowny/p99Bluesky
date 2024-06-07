@@ -52,8 +52,8 @@ async def test_soft_sampleAngleStage() -> None:
             "/workspaces/p99-bluesky/src/p99_bluesky/devices/epics/soft_ioc/p99_softioc.py",
         ],
         stdin=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        stdout=subprocess.PIPE,
+        # stderr=subprocess.PIPE,
+        # stdout=subprocess.PIPE,
     )
 
     async with DeviceCollector(mock=False):
@@ -76,5 +76,6 @@ async def test_soft_sampleAngleStage() -> None:
         mock_sampleAngleStage.roll.get_value(),
     )
     await asyncio.wait_for(result, timeout=2)
-    assert result.result() == [2, 3.1, 4]
+    assert result.result() == [2.0, 3.1, 4.0]
+    # p.terminate()
     p.communicate(b"exit")
