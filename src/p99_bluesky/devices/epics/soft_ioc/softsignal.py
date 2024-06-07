@@ -12,7 +12,6 @@ def soft_signal(prefix: str, input_name: str, readback_name: str) -> None:
         always_update=True,
         on_update=lambda v: temp.set(v),
     )
-    # builder.device.ai.
 
 
 """

@@ -1,4 +1,5 @@
 import asyncio
+import io
 import subprocess
 
 import pytest
@@ -45,15 +46,13 @@ async def test_filter_wheel(mock_filter_wheel: FilterMotor) -> None:
     assert await mock_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
 
 
-async def test_soft_sampleAngleStage() -> None:
-    p = subprocess.Popen(
+async def test_soft_sampleAngleStage(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr("sys.stdin", io.StringIO("my input"))
+    subprocess.run(
         [
             "python",
             "/workspaces/p99-bluesky/src/p99_bluesky/devices/epics/soft_ioc/p99_softioc.py",
-        ],
-        stdin=subprocess.PIPE,
-        # stderr=subprocess.PIPE,
-        # stdout=subprocess.PIPE,
+        ]
     )
 
     async with DeviceCollector(mock=False):
@@ -77,5 +76,4 @@ async def test_soft_sampleAngleStage() -> None:
     )
     await asyncio.wait_for(result, timeout=2)
     assert result.result() == [2.0, 3.1, 4.0]
-    # p.terminate()
-    p.communicate(b"exit")
+    # p.communicate(b"exit()\n")

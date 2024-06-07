@@ -1,3 +1,5 @@
+import time
+
 from softioc import asyncio_dispatcher, builder, softioc
 
 from p99_bluesky.devices.epics.soft_ioc.softsignal import soft_signal
@@ -10,6 +12,5 @@ soft_signal("p99-MO-TABLE-01", "WRITEROLL", "WRITEROLL:RBV")
 soft_signal("p99-MO-TABLE-01", "WRITEPITCH", "WRITEPITCH:RBV")
 builder.LoadDatabase()
 softioc.iocInit(dispatcher)
-
-
-softioc.interactive_ioc(globals())
+time.sleep(2)
+# softioc.interactive_ioc(globals())
