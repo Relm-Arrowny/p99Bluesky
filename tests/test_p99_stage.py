@@ -1,5 +1,4 @@
 import asyncio
-import io
 import subprocess
 
 import pytest
@@ -22,7 +21,6 @@ async def mock_sampleAngleStage():
         mock_sampleAngleStage = SampleAngleStage(
             "p99-MO-TABLE-01:", name="mock_sampleAngleStage"
         )
-        # Signals connected here
     yield mock_sampleAngleStage
 
 
@@ -46,19 +44,20 @@ async def test_filter_wheel(mock_filter_wheel: FilterMotor) -> None:
     assert await mock_filter_wheel.user_setpoint.get_value() == p99StageSelections.Cd25um
 
 
-async def test_soft_sampleAngleStage(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr("sys.stdin", io.StringIO("my input"))
-    subprocess.run(
+async def test_soft_sampleAngleStage() -> None:
+    p = subprocess.Popen(
         [
             "python",
-            "/workspaces/p99-bluesky/src/p99_bluesky/devices/epics/soft_ioc/p99_softioc.py",
-        ]
+            "/workspaces/p99-bluesky/tests/epics/soft_ioc/p99_softioc.py",
+        ],
     )
 
+    await asyncio.sleep(A_BIT)
     async with DeviceCollector(mock=False):
         mock_sampleAngleStage = SampleAngleStage(
             "p99-MO-TABLE-01:", name="mock_sampleAngleStage"
         )
+
     assert mock_sampleAngleStage.name == "mock_sampleAngleStage"
     assert mock_sampleAngleStage.theta.name == "mock_sampleAngleStage-theta"
     assert mock_sampleAngleStage.roll.name == "mock_sampleAngleStage-roll"
@@ -68,7 +67,7 @@ async def test_soft_sampleAngleStage(monkeypatch: pytest.MonkeyPatch) -> None:
         mock_sampleAngleStage.pitch.set(3.1),
         mock_sampleAngleStage.roll.set(4),
     )
-    # await asyncio.wait_for(result, timeout=2)
+    await asyncio.sleep(A_BIT)
     result = asyncio.gather(
         mock_sampleAngleStage.theta.get_value(),
         mock_sampleAngleStage.pitch.get_value(),
@@ -76,4 +75,6 @@ async def test_soft_sampleAngleStage(monkeypatch: pytest.MonkeyPatch) -> None:
     )
     await asyncio.wait_for(result, timeout=2)
     assert result.result() == [2.0, 3.1, 4.0]
-    # p.communicate(b"exit()\n")
+
+    p.terminate()
+    p.wait()
