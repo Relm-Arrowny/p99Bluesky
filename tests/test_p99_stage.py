@@ -48,7 +48,7 @@ async def test_soft_sampleAngleStage() -> None:
     p = subprocess.Popen(
         [
             "python",
-            "/workspaces/p99-bluesky/tests/epics/soft_ioc/p99_softioc.py",
+            "tests/epics/soft_ioc/p99_softioc.py",
         ],
     )
 
