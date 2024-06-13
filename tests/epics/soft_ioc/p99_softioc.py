@@ -19,7 +19,7 @@ def p99_fake() -> None:
     # build the ioc
     builder.LoadDatabase()
     softioc.iocInit(dispatcher)
-    print(softioc.dbnr(), softioc.dbl())
+    # print(softioc.dbnr(), softioc.dbl())  # type: ignore
     while True:
         time.sleep(0.1)
     # softioc.interactive_ioc(globals())

@@ -56,7 +56,7 @@ async def test_soft_sampleAngleStage(RE: RunEngine) -> None:
     await asyncio.wait_for(result, timeout=2)
     assert result.result() == [2.0, 3.1, 4.0, p99StageSelections.Cd25um, 0.0]
     from bluesky.plans import scan
-    from ophyd.sim import det
+    from ophyd.sim import det  # type: ignore
 
     RE(scan([mock_sampleAngleStage.theta, det], xyz_motor.y, -1, 1, 10))
 

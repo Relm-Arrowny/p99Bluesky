@@ -84,9 +84,7 @@ class SoftMotor(StandardReadable, Movable, Stoppable):
         self.user_readback.set_name(name)
 
     @WatchableAsyncStatus.wrap
-    async def set(
-        self, new_position: float, timeout: CalculatableTimeout = CalculateTimeout
-    ):
+    async def set(self, value: float, timeout: CalculatableTimeout = CalculateTimeout):
         self._set_success = True
         (
             old_position,
@@ -104,18 +102,18 @@ class SoftMotor(StandardReadable, Movable, Stoppable):
         if timeout is CalculateTimeout:
             assert velocity > 0, "Motor has zero velocity"
             timeout = (
-                abs(new_position - old_position) / velocity
+                abs(value - old_position) / velocity
                 + 2 * acceleration_time
                 + DEFAULT_TIMEOUT
             )
-        move_status = self.user_setpoint.set(new_position, wait=True, timeout=timeout)
+        move_status = self.user_setpoint.set(value, wait=True, timeout=timeout)
         async for current_position in observe_value(
             self.user_readback, done_status=move_status
         ):
             yield WatcherUpdate(
                 current=current_position,
                 initial=old_position,
-                target=new_position,
+                target=value,
                 name=self.name,
                 unit=units,
                 precision=precision,
