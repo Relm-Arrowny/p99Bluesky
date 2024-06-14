@@ -146,4 +146,4 @@ class SoftMotor(StandardReadable, Movable, Stoppable):
         # the move above, so need to pass wait=False
         await self.motor_stop.trigger(wait=False)
         # Trigger any callbacks
-        await self.user_readback._backend.put(await self.user_readback.get_value())
+        # await self.user_setpoint.set(await self.user_readback.get_value())

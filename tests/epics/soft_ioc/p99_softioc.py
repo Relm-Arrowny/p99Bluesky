@@ -39,7 +39,7 @@ async def p99_fake() -> None:
     builder.LoadDatabase()
     softioc.iocInit(dispatcher)
 
-    print(softioc.dbnr(), softioc.dbl())  # type: ignore
+    # print(softioc.dbnr(), softioc.dbl())  # type: ignore
 
     async def update(y_rbv, y_set, y_vel, y_dmov):
         await _delay_move(y_rbv, y_set, y_vel, y_dmov)
