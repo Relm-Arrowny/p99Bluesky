@@ -4,13 +4,13 @@ from softioc import builder
 def soft_signal(prefix: str, input_name: str, readback_name: str) -> None:
     # Create some records
     builder.SetDeviceName(prefix)
-    temp = builder.aIn(readback_name, initial_value=5)
+    rbv = builder.aIn(readback_name, initial_value=0)
     # rbv.append(temp)
     builder.aOut(
         input_name,
         initial_value=0.1,
         always_update=True,
-        on_update=lambda v: temp.set(v),
+        on_update=lambda v: rbv.set(v),
     )
 
 
@@ -38,35 +38,34 @@ def soft_mbb(prefix: str, name: str, *option):
     )
 
 
-def soft_motor(prefix: str, name: str, unit: str = "mm"):
-    def _delay_move(signal, v, vel):
-        # while (abs(signal.get() - v)) > 0.1:
-        #     signal.set(signal.get() - (signal.get() - v) / 10)
-        #     time.sleep(0.05)
-        signal.set(v)
-
+async def soft_motor(prefix: str, name: str, unit: str = "mm"):
     builder.SetDeviceName(prefix)
     builder.aOut(
         name,
         initial_value=1.1,
         EGU=unit,
         VAL=1.1,
-        PREC=3,
+        PREC=0,
     )
-    ai = builder.aOut(
+    rbv = builder.aOut(
         name + "RBV",
         initial_value=0.0,
     )
     vel = builder.aOut(
         name + "VELO",
-        initial_value=0.01,
+        initial_value=1.5,
     )
-    builder.aOut(
+    dmov = builder.boolOut(
+        name + "DMOV",
+        initial_value=True,
+    )
+    ai = builder.aOut(
         name + "VAL",
         initial_value=0.0,
         always_update=True,
-        on_update=lambda v: _delay_move(ai, v, vel),
+        on_update=lambda v: dmov.set(False),
     )
+
     builder.aOut(
         name + "VMAX",
         initial_value=2,
@@ -79,10 +78,7 @@ def soft_motor(prefix: str, name: str, unit: str = "mm"):
         name + "RDBD",
         initial_value=0.1,
     )
-    builder.aOut(
-        name + "DMOV",
-        initial_value=1,
-    )
+
     builder.aOut(
         name + "LLM",
         initial_value=-100,
@@ -95,3 +91,4 @@ def soft_motor(prefix: str, name: str, unit: str = "mm"):
         name + "STOP",
         initial_value=0,
     )
+    return ai, vel, rbv, dmov

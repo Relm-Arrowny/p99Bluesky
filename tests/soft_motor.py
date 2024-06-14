@@ -1,4 +1,5 @@
 import asyncio
+from collections.abc import Callable
 
 from bluesky.protocols import Movable, Stoppable
 from ophyd_async.core import (
@@ -8,7 +9,7 @@ from ophyd_async.core import (
     StandardReadable,
     WatchableAsyncStatus,
 )
-from ophyd_async.core.signal import observe_value
+from ophyd_async.core.signal import AsyncStatus, SignalR, T, observe_value, wait_for_value
 from ophyd_async.core.utils import (
     DEFAULT_TIMEOUT,
     CalculatableTimeout,
@@ -53,7 +54,10 @@ class SoftThreeAxisStage(Device):
 
 
 class SoftMotor(StandardReadable, Movable, Stoppable):
-    """Device that moves a motor record"""
+    """Device that moves a motor record
+    ToDo: this should not be needed,
+    rather I should try change the record in the softioc to match motor
+    """
 
     def __init__(self, prefix: str, name="") -> None:
         # Define some signals
@@ -69,7 +73,7 @@ class SoftMotor(StandardReadable, Movable, Stoppable):
         self.acceleration_time = epics_signal_rw(float, prefix + "ACCL")
         self.precision = epics_signal_r(int, prefix + ".PREC")
         self.deadband = epics_signal_r(float, prefix + "RDBD")
-        self.motor_done_move = epics_signal_r(float, prefix + "DMOV")
+        self.motor_done_move = epics_signal_r(bool, prefix + "DMOV")
         self.low_limit_travel = epics_signal_rw(float, prefix + "LLM")
         self.high_limit_travel = epics_signal_rw(float, prefix + "HLM")
 
@@ -82,6 +86,16 @@ class SoftMotor(StandardReadable, Movable, Stoppable):
         super().set_name(name)
         # Readback should be named the same as its parent in read()
         self.user_readback.set_name(name)
+
+    @AsyncStatus.wrap
+    async def wait_for_value_with_status(
+        self,
+        signal: SignalR[T],
+        match: T | Callable[[T], bool],
+        timeout: float | None,
+    ):
+        """wrap wait for value so it return an asyncStatus"""
+        await wait_for_value(signal, match, timeout)
 
     @WatchableAsyncStatus.wrap
     async def set(self, value: float, timeout: CalculatableTimeout = CalculateTimeout):
@@ -106,7 +120,12 @@ class SoftMotor(StandardReadable, Movable, Stoppable):
                 + 2 * acceleration_time
                 + DEFAULT_TIMEOUT
             )
-        move_status = self.user_setpoint.set(value, wait=True, timeout=timeout)
+        # modified to actually wait for set point to be set
+        await self.user_setpoint.set(value, wait=True, timeout=timeout)
+        # changed this so that the watcher keep going until the motor is stopped
+        move_status = self.wait_for_value_with_status(
+            self.motor_done_move, True, timeout=None
+        )
         async for current_position in observe_value(
             self.user_readback, done_status=move_status
         ):
