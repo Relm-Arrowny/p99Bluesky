@@ -18,7 +18,6 @@ async def mock_sampleAngleStage():
         mock_sampleAngleStage = SampleAngleStage(
             "p99-MO-TABLE-01:", name="mock_sampleAngleStage"
         )
-        # Signals connected here
     yield mock_sampleAngleStage
 
 
