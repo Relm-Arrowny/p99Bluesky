@@ -36,3 +36,5 @@ class Andor2Driver(ADBase):
             float, prefix + "AndorAccumulatePeriod_RBV"
         )
         self.image_mode = epics_signal_rw_rbv(ImageMode, prefix + "ImageMode")
+
+        self.stat_mean = epics_signal_r(int, prefix + "STAT:MeanValue_RBV")
