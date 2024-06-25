@@ -75,7 +75,8 @@ async def test_Andor2(RE: RunEngine, andor2: Andor2Ad):
     )
 
     RE(takeImg(andor2, 0.01, 3))
-    assert_emitted(docs, start=1, descriptor=1, stream_resource=2, stream_datum=2, stop=1)
+    assert_emitted(docs, start=1, descriptor=1, stream_resource=1, stream_datum=1, stop=1)
+    # assert "" == docs
 
 
 async def test_Andor2_tiggerImg(RE: RunEngine, andor2: Andor2Ad):
@@ -86,7 +87,7 @@ async def test_Andor2_tiggerImg(RE: RunEngine, andor2: Andor2Ad):
 
     RE.subscribe(capture_emitted)
     rbv_mocks = Mock()
-    rbv_mocks.get.side_effect = range(0, 2)
+    rbv_mocks.get.side_effect = range(0, 5)
     callback_on_mock_put(
         andor2._writer.hdf.capture,
         lambda *_, **__: set_mock_value(andor2._writer.hdf.capture, value=True),
@@ -99,14 +100,14 @@ async def test_Andor2_tiggerImg(RE: RunEngine, andor2: Andor2Ad):
 
     set_mock_value(andor2.drv.detector_state, DetectorState.Idle)
 
-    RE(tiggerImg(andor2, 1))
+    RE(tiggerImg(andor2, 4))
     assert str(CURRENT_DIRECTORY) == await andor2.hdf.file_path.get_value()
     assert (
         str(CURRENT_DIRECTORY) + "/test-andor2-hdf0"
         == await andor2.hdf.full_file_name.get_value()
     )
     assert_emitted(
-        docs, start=1, descriptor=1, stream_resource=2, stream_datum=2, event=1, stop=1
+        docs, start=1, descriptor=1, stream_resource=1, stream_datum=1, event=1, stop=1
     )
 
 
@@ -119,16 +120,22 @@ async def test_Andor2_scan(RE: RunEngine, andor2: Andor2Ad):
     RE.subscribe(capture_emitted)
     rbv_mocks = Mock()
     rbv_mocks.get.side_effect = range(0, 100)
+    mean_mocks = Mock()
+    mean_mocks.get.side_effect = range(0, 120)
     callback_on_mock_put(
         andor2._writer.hdf.capture,
         lambda *_, **__: set_mock_value(andor2._writer.hdf.capture, value=True),
     )
-
     callback_on_mock_put(
         andor2.drv.acquire,
         lambda *_, **__: set_mock_value(andor2._writer.hdf.num_captured, rbv_mocks.get()),
     )
-
+    callback_on_mock_put(
+        andor2.drv.stat_mean,
+        lambda *_, **__: set_mock_value(andor2.drv.stat_mean, mean_mocks.get()),
+    )
+    set_mock_value(andor2.drv.stat_mean, 50)
+    set_mock_value(andor2.hdf.nd_array_address, 1234)
     set_mock_value(andor2.drv.detector_state, DetectorState.Idle)
     RE(scan([andor2], motor, -3, 3, 10))
     # RE(count([andor2], 3))
@@ -138,5 +145,6 @@ async def test_Andor2_scan(RE: RunEngine, andor2: Andor2Ad):
         == await andor2.hdf.full_file_name.get_value()
     )
     assert_emitted(
-        docs, start=1, descriptor=1, stream_resource=2, stream_datum=20, event=10, stop=1
+        docs, start=1, descriptor=1, stream_resource=1, stream_datum=10, event=10, stop=1
     )
+    # assert "" == docs

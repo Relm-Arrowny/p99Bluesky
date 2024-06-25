@@ -28,6 +28,7 @@ def takeImg(
 
         yield from bps.prepare(det, tigger_info, group=grp, wait=True)
         yield from bps.kickoff(det, group=grp, wait=True)
+
         yield from bps.collect(det, name="primary", return_payload=True)
         yield from bps.complete(det, group=grp, wait=True)
 
@@ -43,3 +44,10 @@ def tiggerImg(dets: Andor2Ad | Andor3Ad, value: int):
         return (yield from bps.trigger_and_read([dets]))
 
     return (yield from innerTiggerImg())
+
+
+# def flyImg(dets: Andor2Ad | Andor3Ad, count_time: int, motor: SoftMotor):
+#     yield Msg("set", dets.drv.acquire_time, count_time)
+#     @bpp.stage_decorator([dets])
+#     @bpp.run_decorator()
+#     def innerFlyImg():

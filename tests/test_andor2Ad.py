@@ -112,10 +112,10 @@ async def test_Andor(RE: RunEngine, andor2: Andor2Ad):
         docs[name].append(doc)
 
     RE.subscribe(capture_emitted)
-    RE(count_mock(andor2))
+    RE(count_mock(andor2, 2))
 
     assert_emitted(
-        docs, start=1, descriptor=1, stream_resource=2, stream_datum=2, event=1, stop=1
+        docs, start=1, descriptor=1, stream_resource=1, stream_datum=2, event=2, stop=1
     )
     docs = defaultdict(list)
     RE(takeImg(andor2, 0.2, 2, det_trig=DetectorTrigger.internal))

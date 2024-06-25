@@ -51,7 +51,6 @@ class Andor2Ad(StandardDetector):
         self.drv = Andor2Driver(prefix + "CAM:")
         self.hdf = NDFileHDF(prefix + "HDF5:")
         self.counter = 0
-
         super().__init__(
             Andor2Controller(self.drv),
             HDFWriter(
@@ -59,10 +58,11 @@ class Andor2Ad(StandardDetector):
                 directory_provider,
                 lambda: self.name,
                 ADBaseShapeProvider(self.drv),
-                sum="StatsTotal",
+                # sum="StatsTotal",
+                # more="morestuff",
                 **scalar_sigs,
             ),
-            config_sigs=config_sigs,
+            config_sigs=[self.drv.acquire_time, self.drv.stat_mean],
             name=name,
         )
 
