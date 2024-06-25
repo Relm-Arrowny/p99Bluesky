@@ -86,3 +86,4 @@ async def test_fake_p99(RE: RunEngine) -> None:
 
     p.terminate()
     p.wait()
+    await asyncio.sleep(A_BIT)
