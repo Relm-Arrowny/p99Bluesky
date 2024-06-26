@@ -1,8 +1,9 @@
 import asyncio
 import subprocess
+from collections import defaultdict
 
 from bluesky.run_engine import RunEngine
-from ophyd_async.core import DeviceCollector
+from ophyd_async.core import DeviceCollector, assert_emitted
 
 from p99_bluesky.devices.p99.sample_stage import (
     FilterMotor,
@@ -16,7 +17,12 @@ from soft_motor import SoftThreeAxisStage
 A_BIT = 0.001
 
 
-async def test_soft_sampleAngleStage(RE: RunEngine) -> None:
+async def test_fake_p99(RE: RunEngine) -> None:
+    docs = defaultdict(list)
+
+    def capture_emitted(name, doc):
+        docs[name].append(doc)
+
     p = subprocess.Popen(
         [
             "python",
@@ -58,7 +64,26 @@ async def test_soft_sampleAngleStage(RE: RunEngine) -> None:
     from bluesky.plans import scan
     from ophyd.sim import det  # type: ignore
 
-    RE(scan([mock_sampleAngleStage.theta, det], xyz_motor.y, -1, 1, 10))
+    RE(
+        scan(
+            [mock_sampleAngleStage.theta, det],
+            xyz_motor.y,
+            -1,
+            1,
+            xyz_motor.x,
+            -2,
+            2,
+            xyz_motor.z,
+            -3,
+            3,
+            10,
+        ),
+        [
+            capture_emitted,
+        ],
+    )
+    assert_emitted(docs, start=1, descriptor=1, event=10, stop=1)
 
     p.terminate()
     p.wait()
+    await asyncio.sleep(A_BIT)
