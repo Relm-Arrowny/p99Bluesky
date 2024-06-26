@@ -14,6 +14,11 @@ from p99_bluesky.devices.epics.drivers.andor3_driver import Andor3Driver
 
 
 class StaticDirectoryProviderPlus:
+    """
+    Same as DirectoryProvider but add 1 to the file name each time.
+
+    """
+
     def __init__(
         self,
         directory_path: Path,
